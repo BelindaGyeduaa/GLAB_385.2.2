@@ -1,4 +1,4 @@
-# Task Setup
+# Task Setup (Jupyter Notebook)
 
 - in terminal: `python3 -m venv labenv` (mine is `python -m venv .venv`)
 - to start env: `source .venv/bin/activate` (mine is `source .venv/Scripts/activate`)
