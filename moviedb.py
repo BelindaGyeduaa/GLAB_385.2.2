@@ -1,4 +1,5 @@
 # Movie DB Dictionary Project
+import json # bring module into program to use it
 
 # Movie Database
 movie_db = {}
@@ -23,7 +24,6 @@ def add_movie():
     print(f'🎉 Success: {title} added!' )
 
 # Edit a movie
-
 def edit_movie():
     # Ask user what movie to edit
     title = input('Enter the movie title you want to update: ')
@@ -58,7 +58,25 @@ def edit_movie():
         print(f'✅ {title} has been updated.')
     except Exception as e:
         print(f'❌ Error: {e}')
+
 # Delete a movie
+# declare delete_movie() function
+def del_movie():
+    # ask the user for the movie to be deleted
+    title = input('Enter movie title to delete: ')
+
+    try:
+        if title not in movie_db:
+            raise KeyError(f'{title} not in database')
+
+        del movie_db[title]
+
+        print(f'🎉 Success. {title} deleted!')
+    # if movie exists, delete from db and print success!
+    except Exception as e:
+        print(f'❌ Error: {e}')
+    # error handle if the movie doesnt exists
+
 
 # View all movies
 def show_all():
@@ -71,12 +89,55 @@ def show_all():
         print('===============')
 
 # Search Movies
+# Define a search function
+def search_movies():
+    # Prompted the user for search criteria
+    print('🔎 Search Movies in DB')
+    criteria = input('Enter search criteria: ')
+    matches = [] # memory allocation for matching movies
+    ["Dark Knight", 'Spirited Away', 'Forest Gump']
 
-# Save and load movie from a file
+    # Loop through my db to find matches
+    for movie, info in movie_db.items():
+        # use control flow statement with membership operator to find matches
+        if criteria in movie or criteria in info['director'] or criteria in info['actors'] or criteria in info['genre']:
+            matches.append(movie) # Add title to list of found movie
 
-# Error handling
+    # if movie(s) found
+    if matches:
+        print('✅ Matches Found:')
+        for movie in matches: # looping over movie titles, dict[key]
+            print(f'{movie}: {movie_db[movie]}')
+    # else no movies found
+    else:
+        print('❌ No matches found.')
 
-# Data validation
+# save_data - put db to a file
+def save_data():
+    # ask name filename to create
+    filename = input('Enter the filename to save to: ')
+    # open file, 'w' mode, put in 'f' variable
+    with open(f'data/{filename}.json', 'w') as f:
+        # Dump data into external file
+        json.dump(movie_db, f)
+    print('🎉 Success, Data Saved!')
+
+# load_data - pull previous database file into this program
+# define load_data function
+    # ask user where to import file from
+    # try to open the file
+        # save file contents to temp database in app.
+    #print success message
+def load_data():
+    filename = input('Enter the filename to load: ')
+
+    with open(f'data/{filename}.json', 'r') as f:
+        data = json.load(f)
+
+        global movie_db
+        movie_db = data
+
+    print('🎉 Data loaded successfully')
 
 # We have to find a way, to repeatly ask the user what action they want to take
 while True:
@@ -102,12 +163,12 @@ while True:
     elif choice == '4':
         edit_movie()
     elif choice == '5':
-        print('Deleting a movie')
+        del_movie()
     elif choice == '6':
-        print('Searching for movie')
+        search_movies()
     elif choice == '7':
-        print('Saving data to file')
+        save_data()
     elif choice == '8':
-        print('Loading data from file')
+        load_data()
     else:
         print('❌ Invalid Option. Please try again.')
